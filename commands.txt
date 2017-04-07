@@ -1,0 +1,26 @@
+ 1065  rm -rf assets/
+ 1066  bootkube render --asset-dir=assets --api-servers=https://node1.example.com:443 --api-server-alt-names=DNS=node1.example.com --etcd-servers=http://127.0.0.1:2379
+ 1067  sudo ./scripts/devnet destroy
+ 1068  history | grep rk
+ 1069  sudo rkt gc --grace-period=0
+ 1070  sudo ./scripts/devnet create bootkube
+ 1071  history | grep libv
+ 1072  sudo ./scripts/libvirt create
+ 1073  vim ~/.ssh/known_hosts 
+ 1074  ssh core@node1.example.com
+ 1075  for node in 'node1' 'node2' 'node3'; do scp assets/auth/kubeconfig core@$node.example.com:/home/core/kubeconfig; ssh core@$node.example.com 'sudo mv kubeconfig /etc/kubernetes/kubeconfig'; done
+ 1076  scp -r assets core@node1.example.com:/home/core
+ 1077  ssh core@node1.example.com 'sudo mv assets /opt/bootkube/assets && sudo systemctl start bootkube'
+ 1078  ssh core@node1.example.com 'journalctl -f -u bootkube'
+ 1079  kubectl --kubeconfig=assets/auth/kubeconfig get nodes
+ 1080  kubectl --kubeconfig=assets/auth/kubeconfig run -n kube-system kube-qm --image=quay.io/lpabon/qm
+ 1081  kubectl --kubeconfig=assets/auth/kubeconfig get pods --all-namespaces
+ 1082  kubectl --kubeconfig=assets/auth/kubeconfig get pods --all-namespaces -o wide
+ 1083  kubectl --kubeconfig=assets/auth/kubeconfig logs kube-qm-1394339067-00rkx
+ 1084  kubectl --kubeconfig=assets/auth/kubeconfig -n kube-system logs kube-qm-1394339067-00rkx
+ 1085  ls
+ 1086  sudo ./scripts/libvirt destroy
+ 1087  sudo ./scripts/devnet destroy
+ 1088  sudo rkt gc --grace-period=0
+ 1089  history
+
