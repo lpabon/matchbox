@@ -75,6 +75,7 @@ systemd:
         ExecStartPre=/usr/bin/bash -c "grep 'certificate-authority-data' /etc/kubernetes/kubeconfig | awk '{print $2}' | base64 -d > /etc/kubernetes/ca.crt"
         ExecStartPre=-/usr/bin/rkt rm --uuid-file=/var/cache/kubelet-pod.uuid
         ExecStart=/usr/lib/coreos/kubelet-wrapper \
+          --v=5 \
           --allow-privileged \
           --anonymous-auth=false \
           --client-ca-file=/etc/kubernetes/ca.crt \
@@ -89,6 +90,7 @@ systemd:
           --node-labels=node-role.kubernetes.io/master \
           --pod-manifest-path=/etc/kubernetes/manifests \
           --register-with-taints=node-role.kubernetes.io/master=:NoSchedule \
+          --feature-gates=CSIPersistentVolume=true,MountPropagation=true \
           --require-kubeconfig
         ExecStop=-/usr/bin/rkt stop --uuid-file=/var/cache/kubelet-pod.uuid
         Restart=always
@@ -127,7 +129,7 @@ storage:
       contents:
         inline: |
           KUBELET_IMAGE_URL=docker://gcr.io/google_containers/hyperkube
-          KUBELET_IMAGE_TAG=v1.8.5
+          KUBELET_IMAGE_TAG=v1.9.1
     - path: /etc/ssl/etcd/.empty
       filesystem: root
       mode: 0644
