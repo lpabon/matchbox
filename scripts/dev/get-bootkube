@@ -6,7 +6,8 @@ set -eu
 DEST=${1:-"bin"}
 VERSION="v0.9.1"
 
-URL="https://github.com/kubernetes-incubator/bootkube/releases/download/${VERSION}/bootkube.tar.gz"
+#URL="https://github.com/kubernetes-incubator/bootkube/releases/download/${VERSION}/bootkube.tar.gz"
+URL="https://github.com/lpabon/bootkube/releases/download/csi/bootkube.tar.gz"
 
 mkdir -p $DEST
 curl -L -O ${URL}
